@@ -1,8 +1,9 @@
-import {cart} from '../data/cart.js';
-import {products} from '../data/products.js';
-
+import { cart, addToCart, updateCartQuantity } from "../data/cart.js";
+import { products } from "../data/products.js";
 
 let productsHTML = "";
+
+
 
 products.forEach((product) => {
   productsHTML += `
@@ -16,7 +17,9 @@ products.forEach((product) => {
       </div>
 
       <div class="product-rating-container">
-        <img class="product-rating-stars" src="images/ratings/rating-${product.rating.stars * 10}.png" />
+        <img class="product-rating-stars" src="images/ratings/rating-${
+          product.rating.stars * 10
+        }.png" />
         <div class="product-rating-count link-primary">
           ${product.rating.count}
         </div>
@@ -48,7 +51,9 @@ products.forEach((product) => {
         Added
       </div>
 
-      <button class="add-to-cart-button js-add-to-cart button-primary" data-product-id="${product.id}">
+      <button class="add-to-cart-button js-add-to-cart button-primary" data-product-id="${
+        product.id
+      }">
         Add to Cart
       </button>
     </div>
@@ -57,35 +62,14 @@ products.forEach((product) => {
 
 document.querySelector(".js-products-grid").innerHTML = productsHTML;
 
+
 document.querySelectorAll(".js-add-to-cart").forEach((button) => {
   button.addEventListener("click", () => {
     const productId = button.dataset.productId;
-    let matchingItem = null;
 
-    cart.forEach((item) => {
-      if (productId === item.productId) {
-        matchingItem = item;
-      }
-    });
+    addToCart(productId);
+    updateCartQuantity();
 
-    if (matchingItem) {
-      matchingItem.quantity += 1;
-    } else {
-      cart.push({
-        productId: productId,
-        quantity: 1,
-      });
-    }
-
-    let cartQuantity = 0;
-    cart.forEach((item) => {
-      cartQuantity += item.quantity;
-    });
-
-
-    document.querySelector('.js-cart-quantity')
-    .innerHTML=cartQuantity;
-
-
+    document.querySelector(".js-cart-quantity").innerHTML = cartQuantity;
   });
 });
